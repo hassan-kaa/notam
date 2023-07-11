@@ -91,13 +91,6 @@ const addPolygon = async (points) => {
     });
 };
 
-// const point = [
-//   [36.3219, 08.2826],
-//   [36.381, 08.4034],
-//   [36.381, 09.0517],
-//   [36.02, 08.4735],
-// ];
-
 var drawPlygon = function (point) {
   const popupContent = document.createElement("div");
   let deleteButton = document.createElement("button");
