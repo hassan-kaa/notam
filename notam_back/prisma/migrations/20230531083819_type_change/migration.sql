@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Notam" ADD COLUMN     "type" TEXT NOT NULL DEFAULT 'NOTAMC';

@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <title>Protection Aeronautique et Visualisation des notams</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <!-- Formulaire du NOTAM -->
+    <title>Formulaire de NOTAM</title>
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon" />
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+
+    <!-- leaflet draw -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+    <!-- Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/1817c24bb8.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800"
+      rel="stylesheet"
+    />
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link
+      href="assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="assets/vendor/glightbox/css/glightbox.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tailwind.config.js"></script>
+    <link href="output.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="d-flex align-items-center">
+      <div class="container-fluid container-xxl d-flex align-items-center">
+        <div id="logo" class="me-auto">
+          <!-- Uncomment below if you prefer to use a text logo -->
+          <!-- <h1><a href="index.html">The<span>Event</span></a></h1>-->
+          <a href="main.html" class="scrollto"
+            ><img id="logoim" src="assets/img/logo.png" alt="" title=""
+          /></a>
+        </div>
+
+        <nav id="navbar" class="navbar order-last order-lg-0">
+          <ul>
+            <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+            <li><a class="nav-link scrollto" href="#about">About</a></li>
+            <li><a class="nav-link scrollto" href="#Help">Help</a></li>
+            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+        <!-- .navbar -->
+        <a class="check-notams scrollto" href="#check-notams">Logout</a>
+      </div>
+    </header>
+    <!-- End Header -->
+
+    <!-- ======= Hero Section ======= -->
+    <section id="hero">
+      <div class="hero-container" data-aos="zoom-in" data-aos-delay="100">
+        <h1 class="mb-4 pb-0">
+          Protection<br /><span>Aeronautique</span> et Visualisation des NOTAMS
+        </h1>
+        <p class="mb-4 pb-0">
+          Automatisation , Optimisation et Traitement des NOTAMS
+        </p>
+        <a
+          href="https://www.youtube.com/watch?v=jDDaplaOz7Q"
+          class="glightbox play-btn mb-4"
+        ></a>
+        <!-- Live situation modal trigger -->
+
+        <button
+          type="button"
+          style="
+            --tw-bg-opacity: 1;
+            background-color: rgb(248 34 73 / var(--tw-bg-opacity));
+          "
+          class="bg-red rounded-lg px-6 py-3 text-white hover:bg-red-700"
+          data-toggle="modal"
+          data-target="#exampleModal"
+        >
+          Live Situation
+        </button>
+      </div>
+
+      <!-- Live situation Modal -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Live Situation</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="col col-lg-12 macarte">
+                <div id="macarte"></div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="bg-red-600 rounded-lg px-6 py-3 text-white"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <!-- <button class="print-map">print map</button> -->
+              <button
+                type="button"
+                class="bg-blue-400 rounded-lg px-6 py-3 text-white"
+              >
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Hero Section -->
+
+    <main id="main">
+      <!-- ======= Venue Section ======= -->
+      <section id="venue" class="bg-main">
+        <div class="container-fluid" data-aos="fade-up">
+          <div class="section-header">
+            <h2>Actions</h2>
+            <p>
+              You can preview different representations in the map as long as
+              adding new points and NOTAMS
+            </p>
+            <br />
+            <div class="flex flex-row justify-around items-center">
+              <div
+                data-toggle="modal"
+                data-target="#addNotam"
+                class="flex gap-2 cursor-pointer w-25 rounded-4 items-center justify-center flex-col bg-blue-950 p-4 border-2 border-gray-200 border-black border-solid"
+              >
+                <span
+                  class="rounded-full flex items-center justify-center w-16 h-16 bg-blue-600 bg-opacity-20 text-3xl text-white"
+                >
+                  <!-- <i class="fa-solid fa-rectangle-history-circle-plus"></i> -->
+                  <i class="fa-solid fa-plus"></i>
+                </span>
+                <h3 class="text-white font-bold text-2xl">Add Notam</h3>
+                <p class="text-gray-500">
+                  By adding a notam , it will be available in the database and
+                  the following presentations on the map
+                </p>
+                <a
+                  href="#"
+                  class="text-2xl w-8 h-8 px-4 py-2 cursor-pointer items-center justify-center flex rounded-full text-white hover:bg-blue-400 bg-opacity-10"
+                >
+                  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+              <div
+                data-toggle="modal"
+                data-target="#searchNotams"
+                id="getTrigger"
+                class="flex gap-2 cursor-pointer w-25 rounded-4 items-center justify-center flex-col bg-blue-950 p-4 border-2 border-gray-200 border-black border-solid"
+              >
+                <span
+                  class="rounded-full flex items-center justify-center w-16 h-16 bg-blue-600 bg-opacity-20 text-3xl text-white"
+                >
+                  <!-- <i class="fa-solid fa-rectangle-history-circle-plus"></i> -->
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <h3 class="text-white font-bold text-2xl">Search</h3>
+                <p class="text-gray-500">
+                  Displaying all notams and searching for specific notam
+                  according to its unique identifier or similar ones .
+                </p>
+                <a
+                  href="#"
+                  class="text-2xl w-8 h-8 px-4 py-2 cursor-pointer items-center justify-center flex rounded-full text-white hover:bg-blue-400 bg-opacity-10"
+                >
+                  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+              <div
+                data-toggle="modal"
+                data-target="#Preview"
+                class="flex gap-2 cursor-pointer w-25 rounded-4 items-center justify-center flex-col bg-blue-950 p-4 border-2 border-gray-200 border-black border-solid"
+              >
+                <span
+                  class="rounded-full flex items-center justify-center w-16 h-16 bg-blue-600 bg-opacity-20 text-3xl text-white"
+                >
+                  <!-- <i class="fa-solid fa-rectangle-history-circle-plus"></i> -->
+                  <i class="fa-solid fa-map-location-dot"></i>
+                </span>
+                <h3 class="text-white font-bold text-2xl">Preview shape</h3>
+                <p class="text-gray-500">
+                  This feature allows the user to preview shapes before adding
+                  them to the database and confirm its submissions .
+                </p>
+                <a
+                  href="#"
+                  class="text-2xl w-8 h-8 px-4 py-2 cursor-pointer items-center justify-center flex rounded-full text-white hover:bg-blue-400 bg-opacity-10"
+                >
+                  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add notam Modal -->
+        <div
+          class="modal fade"
+          id="addNotam"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="addNotamLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addNotamLabel">Ajouter Notam</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body bg-light">
+                <div class="col col-lg-12">
+                  <!-- <div id="macarte"></div> -->
+                  <div class="container">
+                    <form id="myForm">
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="num_notam">Numéro de NOTAM:</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="num_notam"
+                            name="num_notam"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="type">Type de NOTAM:</label>
+                          <select class="form-control" id="type" name="type">
+                            <option value="type1">NOTAMN</option>
+                            <option value="type2">NOTAMR</option>
+                            <option value="type3">NOTAMC</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="q">Champs Q:</label>
+
+                        <input
+                          class="form-control"
+                          id="champs_q"
+                          name="champs_q"
+                          type="text"
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label for="champs_a">Champs A: Localisation</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="champs_a"
+                          name="champs_a"
+                        />
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="champs_b">Champs B: Date début</label>
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="champs_b"
+                            name="champs_b"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="champs_c">Champs C: Date fin</label>
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="champs_c"
+                            name="champs_c"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="champs_d">Champs D:</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="champs_d"
+                            name="champs_d"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="champs_e">Champs E: </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="champs_e"
+                            name="champs_e"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="champs_f">Champs F: </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="champs_f"
+                            name="champs_f"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="champs_g">Champs G: </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="champs_g"
+                            name="champs_g"
+                          />
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="bg-red-600 rounded-lg px-6 py-3 text-white"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  id="myBTN"
+                  class="bg-blue-600 rounded-lg px-6 py-3 text-white"
+                  data-dismiss="modal"
+                >
+                  Ajouter Notam
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <style>
+          .checkbox {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+          }
+
+          .checkbox input[type="checkbox"] {
+            position: absolute;
+            top: 0;
+            left: 0; /* Change 'right' to 'left' */
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+          }
+
+          .checkbox span {
+            position: absolute;
+            top: 50%;
+            right: 0; /* Change 'left' to 'right' */
+            transform: translate(
+              50%,
+              -50%
+            ); /* Change 'translate(-50%, -50%)' to 'translate(50%, -50%)' */
+            width: 16px;
+            height: 16px;
+            border: 2px solid #000;
+          }
+
+          .checkbox input[type="checkbox"]:checked + span::before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 10px;
+            height: 10px;
+            background-color: #000;
+            /* mouse hover style */
+          }
+        </style>
+        <!-- Search Notams Modal -->
+        <div
+          class="modal fade"
+          id="searchNotams"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="searchNotamsLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="searchNotamsLabel">
+                  Search Notams
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body bg-light">
+                <div class="col col-lg-12">
+                  <div class="form-group">
+                    <label for="notamsCode">Notams Code</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="notamsCode"
+                      placeholder="Enter Here"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <button
+                      type="button"
+                      class="bg-secondary rounded-lg px-6 py-3 text-white hover:bg-gray-700"
+                      id="searchButton"
+                    >
+                      Search
+                    </button>
+                  </div>
+                  <div id="notamsTable"></div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="bg-danger rounded-lg px-6 py-3 text-white hover:bg-red-700"
+                  id="deleteButton"
+                >
+                  Delete
+                </button>
+                <button
+                  type="button"
+                  class="bg-primary rounded-lg px-6 py-3 text-white hover:bg-blue-700"
+                >
+                  Draw NOTAM
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview Shape modal  -->
+        <div
+          class="modal fade"
+          id="Preview"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="PreviewLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="PreviewLabel">Preview shape</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body bg-light row m-0">
+                <div class="col col-md-4">
+                  <div class="container">
+                    <form>
+                      <div class="form-group">
+                        <label>Select Shape</label><br />
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="shapeSelect"
+                            id="circleSelect"
+                            value="circle"
+                            checked
+                          />
+                          <label class="form-check-label" for="circleSelect"
+                            >Add Circle</label
+                          >
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="shapeSelect"
+                            id="polygonSelect"
+                            value="polygon"
+                          />
+                          <label class="form-check-label" for="polygonSelect"
+                            >Add Polygon</label
+                          >
+                        </div>
+                      </div>
+                      <div class="form-group" id="circleInputs">
+                        <label for="radiusInput">Radius</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="radiusInput"
+                          placeholder="Enter radius"
+                        />
+                        <label for="centerInput">Center</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="centerInput"
+                          placeholder="Enter center"
+                        />
+                      </div>
+                      <div
+                        class="form-group"
+                        id="polygonInputs"
+                        style="display: none"
+                      >
+                        <div id="extraPoints"></div>
+                        <button
+                          type="button"
+                          class="px-6 py-3 bg-green-400 rounded-8 text-white"
+                          id="addPointBtn"
+                        >
+                          Add Point
+                        </button>
+                      </div>
+                      <button
+                        id="submitBtn"
+                        type="submit"
+                        class="bg-primary rounded-lg px-6 py-3 text-white hover:bg-blue-700"
+                      >
+                        Preview
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                <div class="col col-md-8">
+                  <div id="previewCarte"></div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="bg-danger rounded-lg px-6 py-3 text-white hover:bg-blue-700"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  id="myBTN"
+                  class="bg-primary rounded-lg px-6 py-3 text-white hover:bg-blue-700"
+                  data-dismiss="modal"
+                >
+                  Submit All Shapes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Venue Section -->
+    </main>
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 footer-info">
+              <img src="assets/img/logo.png" alt="notam" />
+              <p>
+                En regroupant les NOTAMs en un seul endroit et en les présentant
+                de manière claire et concise, l'application NOTAM permet aux
+                utilisateurs d'accéder rapidement aux informations pertinentes
+                pour assurer la sécurité et la conformité lors des vols.
+              </p>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Useful Links</h4>
+              <ul>
+                <li>
+                  <i class="bi bi-chevron-right"></i> <a href="#">Home</a>
+                </li>
+                <li>
+                  <i class="bi bi-chevron-right"></i> <a href="#">About us</a>
+                </li>
+                <li>
+                  <i class="bi bi-chevron-right"></i>
+                  <a href="#">Privacy policy</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-contact">
+              <h4>Contact Us</h4>
+              <p>
+                Centre de la Navigation Aérienne, Route de L'aéroport،, Bd
+                Mohamed Bouazizi, Tunis<br />
+                Tunisia <br />
+                <strong>Phone:</strong> 52 171 343<br />
+                <strong>Email:</strong> mediheb.harbaoui@gmail.com<br />
+              </p>
+
+              <div class="social-links">
+                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="instagram"
+                  ><i class="bi bi-instagram"></i
+                ></a>
+                <a href="#" class="google-play"
+                  ><i class="bi bi-google-play"></i
+                ></a>
+                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="copyright">
+          &copy; Copyright <strong>notam</strong>. All Rights Reserved
+        </div>
+        <div class="credits"></div>
+      </div>
+    </footer>
+    <!-- End  Footer -->
+
+    <a
+      href="#"
+      class="back-to-top d-flex align-items-center justify-content-center"
+      ><i class="bi bi-arrow-up-short"></i
+    ></a>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+    <!-- fichiers javascript -->
+    <!-- <script
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""
+    ></script> -->
+
+    <!-- google-mutant -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"
+      async
+      defer
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet-src.js"
+      integrity="sha512-I5Hd7FcJ9rZkH7uD01G3AjsuzFy3gqz7HIJvzFZGFt2mrCS4Piw9bYZvCgUE0aiJuiZFYIJIwpbNnDIM6ohTrg=="
+      crossorigin=""
+    ></script>
+    <!-- leaflet draw -->
+    <!-- Include Leaflet Draw CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"
+    />
+
+    <!-- Include Leaflet Draw JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+    <!-- import layer -->
+    <script src="firtunis.js"></script>
+    <!-- import layer -->
+    <script src="./service.js"></script>
+
+    <script src="./draw.js"></script>
+    <script src="lib/leaflet.browser.print.min.js"></script>
+
+    <script>
+      // liste des aéroports
+      var Aéroports = {
+        "Aéroport international de Tunis-Carthage (TUN) ": {
+          lat: 36.851,
+          lon: 10.2272,
+        },
+        "Aéroport international de Djerba-Zarzis (DJE)": {
+          lat: 33.875,
+          lon: 10.7772,
+        },
+        "Aéroport international d'Enfidha-Hammamet (NBE)": {
+          lat: 36.0817,
+          lon: 10.4381,
+        },
+        "Aéroport international de Monastir Habib Bourguiba (MIR)": {
+          lat: 35.7586,
+          lon: 10.7544,
+        },
+        "Aéroport international de Sfax-Thyna (SFA)": {
+          lat: 34.7222,
+          lon: 10.6883,
+        },
+        "Aéroport international de Tozeur-Nefta (TOE)": {
+          lat: 33.9381,
+          lon: 8.1106,
+        },
+      };
+
+      // on initialise la carte
+
+      var previewCarte = L.map("previewCarte").setView([36.853, 10.2116], 6);
+
+      var carte = L.map("macarte").setView([36.853, 10.2116], 6);
+
+      //print map
+      $(".print-map").click(function () {
+        window.print();
+      });
+
+      var browserControl = L.control.browserPrint().addTo(carte);
+
+      var drawnItems = new L.FeatureGroup();
+      previewCarte.addLayer(drawnItems);
+
+      var drawControl = new L.Control.Draw({
+        draw: {
+          polygon: {
+            shapeOptions: {
+              color: "purple",
+            },
+            allowIntersection: false,
+            drawError: {
+              color: "orange",
+              timeout: 1000,
+            },
+          },
+          polyline: {
+            shapeOptions: {
+              color: "red",
+            },
+          },
+          rect: {
+            shapeOptions: {
+              color: "green",
+            },
+          },
+          circle: {
+            shapeOptions: {
+              color: "steelblue",
+            },
+          },
+        },
+        edit: {
+          featureGroup: drawnItems,
+        },
+      });
+
+      previewCarte.addControl(drawControl);
+
+      previewCarte.on("draw:created", function (e) {
+        var layer = e.layer;
+
+        // Prompt the user to choose a color for the shape
+        var shapeColor = prompt(
+          "Choose a color for the shape (e.g., red, #ff0000):"
+        );
+        if (shapeColor) {
+          // Set the chosen color as the shape's color
+          layer.setStyle({
+            color: shapeColor,
+          });
+        }
+
+        // Generate the popup content based on the layer type
+        var popupContent = getPopupContent(layer);
+
+        // Bind the popup to the layer
+        layer.bindPopup(popupContent);
+
+        // Add the layer to the feature group
+        drawnItems.addLayer(layer);
+      });
+
+      // Helper method to generate the popup content based on the layer type
+      function getPopupContent(layer) {
+        var type = layerType(layer);
+        var content = "<p><strong>Shape Type: " + type + "</strong></p>";
+
+        // Additional details based on the layer type
+        if (type === "Polygon") {
+          content += "<p>Area: " + calculateArea(layer) + "</p>";
+
+          var coordinates = layer.getLatLngs()[0];
+          content += "<p>Coordinates:</p>";
+          for (var i = 0; i < coordinates.length; i++) {
+            content +=
+              "<p>" +
+              (i + 1) +
+              ". Lat: " +
+              coordinates[i].lat +
+              ", Lng: " +
+              coordinates[i].lng +
+              "</p>";
+          }
+        } else if (type === "Polyline") {
+          content += "<p>Distance: " + calculateDistance(layer) + "</p>";
+        } else if (type === "Rectangle") {
+          content += "<p>Area: " + calculateArea(layer) + "</p>";
+        } else if (type === "Circle") {
+          content += "<p>Center: " + layer.getLatLng().toString() + "</p>";
+          content += "<p>Radius: " + layer.getRadius() + "</p>";
+        }
+
+        return content;
+      }
+
+      // Helper method to calculate the area of a polygon or rectangle
+      function calculateArea(layer) {
+        // Use a library or custom code to calculate the area
+        // Return the calculated area value
+      }
+
+      // Helper method to calculate the distance of a polyline
+      function calculateDistance(layer) {
+        // Use a library or custom code to calculate the distance
+        // Return the calculated distance value
+      }
+
+      // Helper method to determine the layer type
+      function layerType(layer) {
+        if (layer instanceof L.Polygon) {
+          return "Polygon";
+        } else if (layer instanceof L.Polyline) {
+          return "Polyline";
+        } else if (layer instanceof L.Rectangle) {
+          return "Rectangle";
+        } else if (layer instanceof L.Circle) {
+          return "Circle";
+        }
+
+        return "Unknown";
+      }
+      var coordinateControl = L.control({ position: "topright" }); // Create a new control and position it at the top right corner
+
+      coordinateControl.onAdd = function (map) {
+        this._div = L.DomUtil.create("div", "coordinate-control"); // Create a div element with a class
+        return this._div;
+      };
+
+      coordinateControl.update = function (latlng) {
+        this._div.innerHTML =
+          "Latitude: " +
+          latlng.lat.toFixed(6) +
+          "<br>Longitude: " +
+          latlng.lng.toFixed(6); // Update the content of the control with rounded coordinates
+      };
+
+      coordinateControl.addTo(previewCarte); // Add the control to the map
+
+      previewCarte.on("mousemove", function (e) {
+        coordinateControl.update(e.latlng);
+      });
+
+      var osmPreview = L.tileLayer(
+        "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+        {
+          attribution:
+            'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+          minZoom: 6,
+          maxZoom: 15,
+        }
+      ).addTo(previewCarte);
+      var osm = L.tileLayer(
+        "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+        {
+          attribution:
+            'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+          minZoom: 6,
+          maxZoom: 15,
+        }
+      ).addTo(carte);
+
+      // dark map
+      var dark = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: "abcd",
+          minZoom: 6,
+          maxZoom: 15,
+        }
+      ).addTo(carte);
+      var darkPreview = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: "abcd",
+          minZoom: 6,
+          maxZoom: 15,
+        }
+      ).addTo(previewCarte);
+
+      // Google street
+      var googleStreets = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        }
+      ).addTo(carte);
+      var googleStreetsPreview = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        }
+      ).addTo(previewCarte);
+      //google satellite
+      var googleSat = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        }
+      );
+      var googleSatPreview = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        }
+      );
+
+      //google Terrain
+      var googleTerrain = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        }
+      );
+      var googleTerrainPreview = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        }
+      );
+      var baseMaps = {
+        "open street map": osm,
+        terrain: googleTerrain,
+        satellite: googleSat,
+        "dark map": dark,
+        street: googleStreets,
+      };
+      var baseMapsPreview = {
+        "open street map": osmPreview,
+        terrain: googleTerrainPreview,
+        satellite: googleSatPreview,
+        "dark map": darkPreview,
+        street: googleStreetsPreview,
+      };
+      var layerControl = L.control
+        .layers(
+          {
+            "Base Layer": carte,
+          },
+          {
+            "open street map": osm,
+            "dark map": dark,
+            street: googleStreets,
+            satellite: googleSat,
+            terrain: googleTerrain,
+          }
+        )
+        .addTo(carte);
+      var layerControlPreview = L.control
+        .layers(
+          {
+            "Base Layer": previewCarte,
+          },
+          {
+            "open street map": osmPreview,
+            "dark map": darkPreview,
+            street: googleStreetsPreview,
+            satellite: googleSatPreview,
+            terrain: googleTerrainPreview,
+          }
+        )
+        .addTo(previewCarte);
+
+      // Personaliser un marker (icon)
+      var icon = L.icon({
+        iconUrl: "assets/img/airport.png",
+        iconSize: [40, 40],
+        // iconAnchor: [25, 50],
+        popupAnchor: [0, -50],
+      });
+
+      // var tableauMarkers = [];
+      for (Aéroport in Aéroports) {
+        var marker = L.marker(
+          [Aéroports[Aéroport].lat, Aéroports[Aéroport].lon],
+          { icon: icon }
+        ).addTo(carte); //.addTo(carte); Inutile lors de l'utilisation des clusters
+
+        marker.bindPopup("<p>" + Aéroport + "</p>");
+        // markers.addLayer(marker);
+        // tableauMarkers.push(marker);
+      }
+      var tableauMarqueurs = [];
+
+      //     var polygon = L.polygon(points, {
+      //     color: 'black',
+      //     opacity: 0.8,
+      //     weight: 3,
+      //     fillColor: '#04F5F9',
+      //     fillOpacity: 0.5
+      // }).addTo(carte);
+
+      // var content = '<b>NOTAM N°</b><br>' + x1 + '<br><br><button class="butt" onclick="removePolygon();">supprimer la zone</button><br>';
+      // var popup = L.popup().setContent(content);
+      // polygon.bindPopup(popup);
+      // function removePolygon() {
+      //   map.removeLayer(polygon);
+      // }
+      // var polygon = L.polygon([[36.3219, 08.2826],
+      //    [36.3810, 08.4034],
+      //   [36.3810, 09.0517], [36.0200, 08.4735],], {
+      //     color: 'black',
+      //     opacity: 0.8,
+      //     weight: 3,
+      //     fillColor: '#04F5F9',
+      //     fillOpacity: 0.5
+      // }).addTo(carte);
+
+      // ajouter un polygone
+      //     var polygon = L.polygon([
+      //     [36.3219, 08.2826],
+      //     [36.3810, 08.4034],
+      //     [36.3810, 09.0517],
+      //     [36.0200, 08.4735],
+      // ]).addTo(carte);
+
+      //  Map click
+      var popup = L.popup();
+
+      function onMapClick(e) {
+        popup
+          .setLatLng(e.latlng)
+          .setContent("You clicked the map at " + e.latlng.toString())
+          .openOn(carte);
+      }
+
+      carte.on("click", onMapClick);
+
+      // // // ajouter layer
+      var myStyle = function (feature) {
+        var name = feature.properties.NAME;
+        if (/FIR/.test(name)) {
+          return {
+            color: "#00ff84",
+            weight: 2.5,
+          };
+        } else if (/DT/.test(name)) {
+          return {
+            color: "red",
+            weight: 2.5,
+          };
+        } else if (/CTR/.test(name)) {
+          return {
+            color: "#FFD93D",
+            weight: 2.5,
+          };
+        } else if (/AIRSPACE/.test(name)) {
+          return {
+            color: "#00ff84",
+            weight: 2.5,
+          };
+        } else if (/TEST/.test(name)) {
+          return {
+            color: "#FFFF00",
+            weight: 5.5,
+          };
+        } else {
+          return {
+            color: "#0077ff",
+            weight: 2.5,
+          };
+        }
+      };
+      var shapesStyle = function (feature) {
+        var name = feature.properties.NAME;
+        if (/FIR/.test(name)) {
+          return {
+            color: "yellow",
+            weight: 2.5,
+          };
+        } else if (/DT/.test(name)) {
+          return {
+            color: "blue",
+            weight: 2.5,
+          };
+        } else if (/CTR/.test(name)) {
+          return {
+            color: "black",
+            weight: 2.5,
+          };
+        } else if (/AIRSPACE/.test(name)) {
+          return {
+            color: "green",
+            weight: 2.5,
+          };
+        } else if (/TEST/.test(name)) {
+          return {
+            color: "purple",
+            weight: 5.5,
+          };
+        } else {
+          return {
+            color: "red",
+            weight: 2.5,
+          };
+        }
+      };
+
+      //fixed firs
+      // var myLayer = L.geoJSON(firtunis, {
+      //   style: myStyle,
+      // }).addTo(carte);
+    </script>
+  </body>
+</html>

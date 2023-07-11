@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Notam {
+  id Int      @id @default(autoincrement())
+  type String @default("NOTAMC")
+  num_notam String @unique
+  champs_q  String
+  champs_a  String
+  champs_b  String
+  champs_c  String
+  champs_d  String
+  champs_e  String
+  champs_f  String
+  champs_g  String
+}
+
+
+model circle { 
+  id Int @id @default(autoincrement())
+  center Float[]
+  radius Float 
+}
+model polygon{
+  id Int @id @default(autoincrement())
+  points Json[]
+}
+
